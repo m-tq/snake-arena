@@ -666,6 +666,9 @@ function handleSetProfile(ws, msg, existingPlayer, ip) {
 function handleGetRooms(ws) {
   const rooms = roomManager.listRooms();
   const stats = roomManager.getStats();
+  const onlinePlayers = getOnlinePlayersCount();
+  stats.totalPlayers = onlinePlayers;
+  stats.onlinePlayers = onlinePlayers;
 
   if (ws.readyState === 1) {
     ws.send(
@@ -676,6 +679,16 @@ function handleGetRooms(ws) {
       }),
     );
   }
+}
+
+function getOnlinePlayersCount() {
+  let onlinePlayers = 0;
+  for (const [, player] of connectedPlayers) {
+    if (player.connected && player.ws && player.ws.readyState === 1) {
+      onlinePlayers += 1;
+    }
+  }
+  return onlinePlayers;
 }
 
 function handleCreateRoom(player, msg) {
@@ -992,12 +1005,7 @@ roomManager._onRoomDestroyed = (creatorId) => {
 function broadcastRoomList() {
   const rooms = roomManager.listRooms();
   const stats = roomManager.getStats();
-  let onlinePlayers = 0;
-  for (const [, player] of connectedPlayers) {
-    if (player.connected && player.ws && player.ws.readyState === 1) {
-      onlinePlayers += 1;
-    }
-  }
+  const onlinePlayers = getOnlinePlayersCount();
   stats.totalPlayers = onlinePlayers;
   stats.onlinePlayers = onlinePlayers;
   const msg = JSON.stringify({ type: "room_list", rooms, stats });
