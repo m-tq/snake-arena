@@ -228,8 +228,9 @@ app.get("/api/config", (_req, res) => {
 app.get("/api/leaderboard", (req, res) => {
   const sortBy = req.query.sort || "totalScore";
   const limit = Math.min(parseInt(req.query.limit, 10) || 20, 100);
-  const board = db.getGlobalLeaderboard(sortBy, limit);
-  const summary = db.getGlobalSummary();
+  const gameMode = req.query.mode || "last_standing";
+  const board = db.getGlobalLeaderboard(sortBy, limit, gameMode);
+  const summary = db.getGlobalSummary(gameMode);
   res.json({ leaderboard: board, summary });
 });
 
@@ -825,8 +826,9 @@ function handleGetMyStats(player) {
 function handleGetGlobalLeaderboard(ws, msg) {
   const sortBy = msg.sortBy || "totalScore";
   const limit = Math.min(parseInt(msg.limit, 10) || 20, 100);
-  const board = db.getGlobalLeaderboard(sortBy, limit);
-  const summary = db.getGlobalSummary();
+  const gameMode = msg.gameMode || "last_standing";
+  const board = db.getGlobalLeaderboard(sortBy, limit, gameMode);
+  const summary = db.getGlobalSummary(gameMode);
 
   if (ws.readyState === 1) {
     ws.send(
@@ -990,6 +992,14 @@ roomManager._onRoomDestroyed = (creatorId) => {
 function broadcastRoomList() {
   const rooms = roomManager.listRooms();
   const stats = roomManager.getStats();
+  let onlinePlayers = 0;
+  for (const [, player] of connectedPlayers) {
+    if (player.connected && player.ws && player.ws.readyState === 1) {
+      onlinePlayers += 1;
+    }
+  }
+  stats.totalPlayers = onlinePlayers;
+  stats.onlinePlayers = onlinePlayers;
   const msg = JSON.stringify({ type: "room_list", rooms, stats });
 
   for (const [, player] of connectedPlayers) {

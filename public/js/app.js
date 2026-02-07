@@ -517,7 +517,7 @@
      */
     async _fetchDbSummaryForLobby() {
       try {
-        const res = await fetch("/api/leaderboard?limit=1");
+        const res = await fetch("/api/leaderboard?limit=1&mode=all");
         if (res.ok) {
           const data = await res.json();
           if (data.summary) {
@@ -1368,8 +1368,15 @@
 
     _loadGlobalLeaderboard() {
       const sortEl = document.getElementById("global-lb-sort");
+      const modeEl = document.getElementById("global-lb-mode");
       const sortBy = sortEl ? sortEl.value : "totalScore";
-      Network.send({ type: "get_global_leaderboard", sortBy, limit: 20 });
+      const gameMode = modeEl ? modeEl.value : "last_standing";
+      Network.send({
+        type: "get_global_leaderboard",
+        sortBy,
+        limit: 20,
+        gameMode,
+      });
     },
 
     _loadMyStats() {
@@ -1388,6 +1395,20 @@
       if (els.games) els.games.textContent = summary.totalGames || 0;
       if (els.kills) els.kills.textContent = summary.totalKills || 0;
       if (els.score) els.score.textContent = summary.totalScore || 0;
+
+      const modeEl = document.getElementById("global-lb-mode");
+      const titleEl = document.getElementById("global-lb-title");
+      const modeLabelMap = {
+        last_standing: "Last Standing",
+        timed: "Timed",
+        free_play: "Free Play",
+      };
+      if (titleEl) {
+        const label =
+          modeLabelMap[modeEl ? modeEl.value : "last_standing"] ||
+          "Last Standing";
+        titleEl.textContent = `${label} Leaderboard`;
+      }
 
       // List
       const listEl = document.getElementById("global-lb-list");
@@ -1629,6 +1650,12 @@
       const globalLbSort = document.getElementById("global-lb-sort");
       if (globalLbSort) {
         globalLbSort.addEventListener("change", () => {
+          this._loadGlobalLeaderboard();
+        });
+      }
+      const globalLbMode = document.getElementById("global-lb-mode");
+      if (globalLbMode) {
+        globalLbMode.addEventListener("change", () => {
           this._loadGlobalLeaderboard();
         });
       }

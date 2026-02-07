@@ -379,19 +379,25 @@
           <div id="global-lb-panel" class="lobby-tab-panel w-full max-w-lg space-y-4 hidden" data-panel="leaderboard">
             <div class="bg-card text-card-fg shadow-card dark:shadow-card-dark p-5 space-y-4 transition-colors duration-300">
               <div class="flex items-center justify-between">
-                <h3 class="text-sm font-semibold flex items-center gap-2">
+                <h3 id="global-lb-title" class="text-sm font-semibold flex items-center gap-2">
                   <i data-lucide="trophy" class="w-4 h-4 text-yellow-500"></i>
                   All-Time Leaderboard
                 </h3>
-                <!-- Sort picker -->
-                <select id="global-lb-sort" class="h-7 px-2 text-[10px] bg-bg border border-input text-fg focus:outline-none focus:ring-1 focus:ring-primary">
-                  <option value="totalScore">Total Score</option>
-                  <option value="gamesWon">Games Won</option>
-                  <option value="totalKills">Total Kills</option>
-                  <option value="highestScore">Highest Score</option>
-                  <option value="longestSnake">Longest Snake</option>
-                  <option value="gamesPlayed">Games Played</option>
-                </select>
+                <div class="flex items-center gap-2">
+                  <select id="global-lb-mode" class="h-7 px-2 text-[10px] bg-bg border border-input text-fg focus:outline-none focus:ring-1 focus:ring-primary">
+                    <option value="last_standing">Last Standing</option>
+                    <option value="timed">Timed</option>
+                    <option value="free_play">Free Play</option>
+                  </select>
+                  <select id="global-lb-sort" class="h-7 px-2 text-[10px] bg-bg border border-input text-fg focus:outline-none focus:ring-1 focus:ring-primary">
+                    <option value="totalScore">Total Score</option>
+                    <option value="gamesWon">Games Won</option>
+                    <option value="totalKills">Total Kills</option>
+                    <option value="highestScore">Highest Score</option>
+                    <option value="longestSnake">Longest Snake</option>
+                    <option value="gamesPlayed">Games Played</option>
+                  </select>
+                </div>
               </div>
 
               <!-- Global summary bar -->

@@ -207,6 +207,36 @@ function _prepareStatements() {
          COALESCE((SELECT SUM(total_score) FROM stats), 0) AS total_score,
          COALESCE((SELECT SUM(games_played) FROM stats), 0) AS total_games_played`,
     ),
+    modeLeaderboardBase: db.prepare(
+      `SELECT
+         gp.player_id,
+         p.username,
+         p.color,
+         p.pattern,
+         COUNT(DISTINCT g.id) AS games_played,
+         COALESCE(SUM(CASE WHEN g.winner_id = gp.player_id THEN 1 ELSE 0 END), 0) AS games_won,
+         COALESCE(SUM(gp.score), 0) AS total_score,
+         COALESCE(SUM(gp.kills), 0) AS total_kills,
+         COALESCE(SUM(CASE WHEN gp.alive = 0 THEN 1 ELSE 0 END), 0) AS total_deaths,
+         COALESCE(MAX(gp.score), 0) AS highest_score,
+         COALESCE(MAX(gp.length), 0) AS longest_snake
+       FROM game_players gp
+       INNER JOIN games g ON g.id = gp.game_id
+       INNER JOIN players p ON p.id = gp.player_id
+       WHERE g.game_mode = ?
+       GROUP BY gp.player_id`,
+    ),
+    modeSummary: db.prepare(
+      `SELECT
+         COUNT(DISTINCT gp.player_id) AS total_players,
+         COUNT(DISTINCT g.id) AS total_games,
+         COALESCE(SUM(gp.kills), 0) AS total_kills,
+         COALESCE(SUM(gp.score), 0) AS total_score,
+         COUNT(*) AS total_games_played
+       FROM game_players gp
+       INNER JOIN games g ON g.id = gp.game_id
+       WHERE g.game_mode = ?`,
+    ),
 
     // History trimming
     oldestGameIds: db.prepare(
@@ -624,7 +654,7 @@ function _trimHistory() {
 //  Global Leaderboard
 // ═════════════════════════════════════════════════════════════════════════════
 
-function getGlobalLeaderboard(sortBy, limit) {
+function getGlobalLeaderboard(sortBy, limit, gameMode) {
   sortBy = sortBy || "totalScore";
   limit = limit || 20;
 
@@ -644,7 +674,10 @@ function getGlobalLeaderboard(sortBy, limit) {
     sortBy = "totalScore";
   }
 
-  const rows = stmts.leaderboardBase.all();
+  const rows =
+    gameMode && gameMode !== "all"
+      ? stmts.modeLeaderboardBase.all(gameMode)
+      : stmts.leaderboardBase.all();
 
   // Build entries
   const entries = rows.map((row) => {
@@ -678,8 +711,11 @@ function getGlobalLeaderboard(sortBy, limit) {
   }));
 }
 
-function getGlobalSummary() {
-  const row = stmts.globalSummary.get();
+function getGlobalSummary(gameMode) {
+  const row =
+    gameMode && gameMode !== "all"
+      ? stmts.modeSummary.get(gameMode)
+      : stmts.globalSummary.get();
   return {
     totalPlayers: row ? row.total_players : 0,
     totalGames: row ? row.total_games : 0,
