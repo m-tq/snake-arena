@@ -1,0 +1,24 @@
+{
+  "name": "snake-arena",
+  "version": "1.0.0",
+  "description": "Snake Arena – Realtime Multiplayer (Node.js + WebSocket)",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "keywords": [
+    "snake",
+    "multiplayer",
+    "websocket",
+    "arena",
+    "realtime"
+  ],
+  "author": "Octra",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "express": "^4.18.2",
+    "ws": "^8.16.0"
+  }
+}

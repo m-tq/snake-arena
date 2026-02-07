@@ -1,0 +1,865 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   Snake Arena — Style Sheet
+   Design tokens, theme variables, component styles, animations
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Design Tokens (Light Theme) ──────────────────────────────────────────── */
+:root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 234 100% 61%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 93%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 220 14% 93%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 220 14% 80%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 13% 82%;
+    --input: 220 13% 82%;
+    --ring: 0 0% 3.9%;
+
+    --private-primary: 170 100% 45%;
+    --private-primary-foreground: 0 0% 100%;
+
+    --header-height: 3rem;
+    --footer-height: 1.75rem;
+}
+
+/* ─── Dark Theme ───────────────────────────────────────────────────────────── */
+.dark {
+    --background: 0 0% 10.2%;
+    --foreground: 0 0% 90%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 90%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 90%;
+    --primary: 234 100% 61%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 0 0% 16%;
+    --accent-foreground: 0 0% 90%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 90%;
+    --border: 0 0% 22%;
+    --input: 0 0% 22%;
+    --ring: 240 91% 60%;
+}
+
+/* ─── Base ──────────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: "Fira Code", monospace;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────────────────────── */
+.scrollbar-thin::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 9999px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Firefox */
+.scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+}
+
+/* ─── Game HUD Controls Info ───────────────────────────────────────────────── */
+.controls-hint {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+    text-align: center;
+    padding: 2px 6px;
+}
+
+/* ─── Screen Transitions ───────────────────────────────────────────────────── */
+.screen {
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transform: translateY(6px);
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* ─── Navigation Link Glow Hover ───────────────────────────────────────────── */
+.nav-link {
+    position: relative;
+    transition:
+        color 0.2s ease,
+        text-shadow 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link:active,
+.nav-link.active {
+    background: none !important;
+    text-shadow:
+        0 0 8px currentColor,
+        0 0 16px currentColor;
+}
+
+/* ─── General Glow Hover for Interactive Elements ──────────────────────────── */
+.glow-hover {
+    transition: all 0.2s ease;
+}
+
+.glow-hover:hover {
+    box-shadow: 0 0 8px 2px currentColor;
+}
+
+.glow-hover:active {
+    box-shadow: 0 0 14px 4px currentColor;
+}
+
+/* ─── Card Styles (no border, shadow only) ─────────────────────────────────── */
+.bg-card {
+    border: none;
+}
+
+/* ─── Sharp Edges Default (no border-radius) ───────────────────────────────── */
+input,
+button,
+select,
+textarea,
+.bg-card {
+    border-radius: 0;
+}
+
+/* Exception: things that should be round */
+.rounded-full {
+    border-radius: 9999px !important;
+}
+
+/* ─── Focus Visible ────────────────────────────────────────────────────────── */
+*:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+}
+
+button:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ─── Input Styles ─────────────────────────────────────────────────────────── */
+input[type="text"],
+input[type="number"],
+input[type="email"] {
+    background-color: hsl(var(--background));
+    border: 1px solid hsl(var(--input));
+    color: hsl(var(--foreground));
+    font-family: "Fira Code", monospace;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus {
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.15);
+}
+
+input[type="text"]::placeholder {
+    color: hsl(var(--muted-foreground));
+}
+
+/* ─── Range Input ──────────────────────────────────────────────────────────── */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: hsl(var(--muted));
+    outline: none;
+    border-radius: 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    background: hsl(var(--primary));
+    cursor: pointer;
+    border: none;
+    border-radius: 0;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: hsl(var(--primary));
+    cursor: pointer;
+    border: none;
+    border-radius: 0;
+}
+
+/* ─── Button Active States ─────────────────────────────────────────────────── */
+button.active,
+button[data-active="true"] {
+    border-color: hsl(var(--primary)) !important;
+    background-color: hsl(var(--primary) / 0.1) !important;
+    color: hsl(var(--primary)) !important;
+}
+
+.grid-size-btn.active,
+.mode-btn.active {
+    border-color: hsl(var(--primary));
+    background-color: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+    box-shadow: 0 0 6px 1px hsl(var(--primary) / 0.2);
+}
+
+/* ─── Color Picker Swatches ────────────────────────────────────────────────── */
+.color-swatch {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.color-swatch:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 8px 2px var(--swatch-color);
+}
+
+.color-swatch.selected {
+    border-color: hsl(var(--foreground));
+    box-shadow: 0 0 10px 2px var(--swatch-color);
+}
+
+.color-swatch.selected::after {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ─── Pattern Picker ───────────────────────────────────────────────────────── */
+.pattern-btn {
+    cursor: pointer;
+    border: 1px solid hsl(var(--input));
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    padding: 4px 6px;
+    font-size: 10px;
+    font-family: "Fira Code", monospace;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.pattern-btn:hover {
+    border-color: hsl(var(--primary));
+}
+
+.pattern-btn.selected {
+    border-color: hsl(var(--primary));
+    background-color: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+    box-shadow: 0 0 6px 1px hsl(var(--primary) / 0.2);
+}
+
+/* ─── Room List Entry ──────────────────────────────────────────────────────── */
+.room-entry {
+    background-color: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.room-entry:hover {
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 6px 1px hsl(var(--primary) / 0.15);
+}
+
+.room-entry.active {
+    border-color: hsl(var(--primary));
+    background-color: hsl(var(--primary) / 0.05);
+}
+
+/* ─── Room State Badges ────────────────────────────────────────────────────── */
+.state-waiting {
+    background-color: hsl(45 100% 50% / 0.1);
+    color: hsl(45 100% 50%);
+}
+
+.state-countdown {
+    background-color: hsl(30 100% 50% / 0.1);
+    color: hsl(30 100% 50%);
+}
+
+.state-playing {
+    background-color: hsl(142 71% 45% / 0.1);
+    color: hsl(142 71% 45%);
+}
+
+.state-ended {
+    background-color: hsl(var(--muted-foreground) / 0.1);
+    color: hsl(var(--muted-foreground));
+}
+
+/* ─── Player List Entry in Room ────────────────────────────────────────────── */
+.player-entry {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background-color: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
+    transition: all 0.15s ease;
+}
+
+.player-entry.is-you {
+    border-color: hsl(var(--primary) / 0.5);
+    background-color: hsl(var(--primary) / 0.05);
+}
+
+.player-entry .player-color {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+}
+
+.player-entry .player-name {
+    font-size: 12px;
+    font-weight: 500;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.player-entry .player-badge {
+    font-size: 9px;
+    padding: 1px 5px;
+    font-weight: 600;
+}
+
+/* ─── Leaderboard Entry ────────────────────────────────────────────────────── */
+.lb-entry {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    background-color: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
+    transition: all 0.15s ease;
+    font-size: 11px;
+}
+
+.lb-entry.is-you {
+    border-color: hsl(var(--primary) / 0.5);
+    background-color: hsl(var(--primary) / 0.05);
+}
+
+.lb-entry.is-dead {
+    opacity: 0.55;
+}
+
+.lb-entry .lb-rank {
+    width: 18px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 10px;
+    color: hsl(var(--muted-foreground));
+}
+
+.lb-entry:nth-child(1) .lb-rank {
+    color: hsl(45 100% 50%);
+}
+
+.lb-entry:nth-child(2) .lb-rank {
+    color: hsl(0 0% 75%);
+}
+
+.lb-entry:nth-child(3) .lb-rank {
+    color: hsl(25 60% 50%);
+}
+
+.lb-entry .lb-color {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+}
+
+.lb-entry .lb-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.lb-entry .lb-score {
+    font-weight: 600;
+    color: hsl(var(--primary));
+    min-width: 30px;
+    text-align: right;
+}
+
+.lb-entry .lb-length {
+    font-weight: 500;
+    color: hsl(170 100% 45%);
+    min-width: 20px;
+    text-align: right;
+}
+
+/* ─── Leaderboard Tabs ─────────────────────────────────────────────────────── */
+.lb-tab {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lb-tab:hover {
+    color: hsl(var(--foreground));
+}
+
+.lb-tab.active {
+    color: hsl(var(--primary));
+    border-bottom-color: hsl(var(--primary));
+}
+
+/* ─── Kill Feed Entry ──────────────────────────────────────────────────────── */
+.kill-feed-entry {
+    font-size: 10px;
+    padding: 2px 6px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
+    animation: killFeedSlide 0.3s ease-out forwards;
+    max-width: 100%;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kill-feed-entry.fading {
+    animation: killFeedFade 0.5s ease-out forwards;
+}
+
+@keyframes killFeedSlide {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes killFeedFade {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+}
+
+/* ─── Powerup Badge (HUD) ─────────────────────────────────────────────────── */
+.powerup-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    color: white;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.powerup-badge .pu-bar {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: width 0.15s linear;
+}
+
+/* ─── Toast Notifications ──────────────────────────────────────────────────── */
+.toast {
+    pointer-events: auto;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-family: "Fira Code", monospace;
+    background-color: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    border-left: 3px solid hsl(var(--primary));
+    animation: toastSlideIn 0.3s ease-out forwards;
+    max-width: 300px;
+}
+
+.toast.toast-error {
+    border-left-color: hsl(var(--destructive));
+}
+
+.toast.toast-success {
+    border-left-color: hsl(142 71% 45%);
+}
+
+.toast.toast-exit {
+    animation: toastSlideOut 0.25s ease-in forwards;
+}
+
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes toastSlideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+}
+
+/* ─── Sidebar Collapse ─────────────────────────────────────────────────────── */
+#lobby-sidebar[data-open="false"] {
+    width: 0;
+    padding: 0;
+    border-right: none;
+    overflow: hidden;
+}
+
+#lobby-sidebar[data-open="false"] > * {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* The main sidebar toggle button must ALWAYS be visible, even when sidebar is collapsed */
+#btn-sidebar-toggle-main {
+    display: flex !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+#leaderboard-panel[data-open="false"] {
+    width: 0;
+    padding: 0;
+    border-left: none;
+    overflow: hidden;
+}
+
+#leaderboard-panel[data-open="false"] > * {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Floating leaderboard toggle — shown when panel is closed */
+#btn-lb-toggle-float {
+    transition: all 0.2s ease;
+}
+
+#btn-lb-toggle-float:hover {
+    border-color: hsl(var(--primary));
+    color: hsl(var(--primary));
+}
+
+#btn-sidebar-toggle,
+#btn-sidebar-toggle-main,
+#btn-lb-toggle,
+#btn-lb-toggle-float {
+    cursor: pointer;
+}
+
+/* ─── Game Canvas ──────────────────────────────────────────────────────────── */
+#game-canvas {
+    image-rendering: auto;
+    cursor: default;
+}
+
+/* ─── Minimap ──────────────────────────────────────────────────────────────── */
+.minimap-container {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* ─── Mobile Boost Button ──────────────────────────────────────────────────── */
+#btn-mobile-boost {
+    border-radius: 50%;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+#btn-mobile-boost:active {
+    background-color: rgba(234, 179, 8, 0.4);
+    transform: scale(0.95);
+}
+
+/* ─── Death Overlay Buttons ────────────────────────────────────────────────── */
+#death-overlay button {
+    transition: all 0.2s ease;
+}
+
+#death-overlay button:hover {
+    transform: translateY(-1px);
+}
+
+/* ─── Game Screen Cursor Hint ──────────────────────────────────────────────── */
+#game-canvas-container {
+    cursor: default;
+}
+
+/* ─── Standing Entry (Game Over) ───────────────────────────────────────────── */
+.standing-entry {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 8px;
+    background-color: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
+    font-size: 11px;
+    transition: all 0.15s ease;
+}
+
+.standing-entry:first-child {
+    border-color: hsl(45 100% 50% / 0.4);
+    background-color: hsl(45 100% 50% / 0.05);
+}
+
+.standing-entry .standing-rank {
+    width: 18px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 10px;
+}
+
+.standing-entry:nth-child(1) .standing-rank {
+    color: hsl(45 100% 50%);
+}
+.standing-entry:nth-child(2) .standing-rank {
+    color: hsl(0 0% 75%);
+}
+.standing-entry:nth-child(3) .standing-rank {
+    color: hsl(25 60% 50%);
+}
+
+.standing-entry .standing-color {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+}
+
+.standing-entry .standing-name {
+    flex: 1;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.standing-entry .player-badge {
+    font-size: 9px;
+    padding: 1px 5px;
+    font-weight: 600;
+}
+
+.standing-entry .standing-score {
+    font-weight: 600;
+    color: hsl(var(--primary));
+}
+
+.standing-entry .standing-kills {
+    font-size: 10px;
+    color: hsl(var(--muted-foreground));
+}
+
+/* ─── Disconnected Player Indicator ────────────────────────────────────────── */
+.player-disconnected {
+    opacity: 0.45;
+}
+
+.player-disconnected .player-name::after {
+    content: " (DC)";
+    font-size: 9px;
+    color: hsl(var(--destructive));
+}
+
+/* ─── Responsive: Mobile ───────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+    body {
+        overflow-y: auto;
+    }
+
+    #lobby-sidebar {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        bottom: var(--footer-height);
+        z-index: 40;
+        width: 280px;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    #lobby-sidebar[data-open="false"] {
+        width: 0;
+        box-shadow: none;
+    }
+
+    #leaderboard-panel {
+        position: fixed;
+        top: var(--header-height);
+        right: 0;
+        bottom: var(--footer-height);
+        z-index: 40;
+        width: 240px;
+        box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    #leaderboard-panel[data-open="false"] {
+        width: 0;
+        box-shadow: none;
+    }
+
+    .touch-btn {
+        border-radius: 4px;
+    }
+}
+
+/* ─── Responsive: Compact text on small screens ────────────────────────────── */
+@media (max-width: 480px) {
+    .screen h2 {
+        font-size: 1.25rem;
+    }
+
+    .screen h3 {
+        font-size: 0.8rem;
+    }
+
+    #main-header h1 {
+        font-size: 0.75rem;
+    }
+}
+
+/* ─── Theme transition smoothness ──────────────────────────────────────────── */
+html.dark,
+html.light,
+html {
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
+
+/* ─── Z-index layers ───────────────────────────────────────────────────────── */
+.z-15 {
+    z-index: 15;
+}
+
+/* ─── Animations: Countdown ────────────────────────────────────────────────── */
+.countdown-go {
+    font-size: 4rem;
+    font-weight: 900;
+    color: hsl(142 71% 45%);
+    animation: countdownGo 0.6s cubic-bezier(0.2, 1.4, 0.5, 1) forwards;
+}
+
+@keyframes countdownGo {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* ─── Particle system container ────────────────────────────────────────────── */
+.particle {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 0;
+    animation: particleFly 0.6s ease-out forwards;
+}
+
+@keyframes particleFly {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--px, 20px), var(--py, -20px)) scale(0.3);
+    }
+}
+
+/* ─── Selection color ──────────────────────────────────────────────────────── */
+::selection {
+    background-color: hsl(var(--primary) / 0.3);
+    color: hsl(var(--foreground));
+}

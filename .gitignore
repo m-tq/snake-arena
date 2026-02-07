@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.env
+.env.local
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Database files (auto-generated, don't commit)
+data/*.json
+data/*.json.tmp
+data/*.json.migrated
+data/*.db
+data/*.db-wal
+data/*.db-shm
+!data/.gitkeep
