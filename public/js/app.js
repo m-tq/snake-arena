@@ -899,9 +899,12 @@
 
       const isHost =
         this.currentRoom && this.currentRoom.creatorId === this.playerId;
+      const isEnded =
+        this.currentRoom && this.currentRoom.state === "ended";
+      const show = !!(isHost && isEnded);
 
-      playAgainBtn.disabled = !isHost;
-      playAgainBtn.classList.toggle("hidden", !isHost);
+      playAgainBtn.disabled = !show;
+      playAgainBtn.classList.toggle("hidden", !show);
     },
 
     _setGameCursor(enabled) {
