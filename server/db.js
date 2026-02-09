@@ -701,11 +701,20 @@ function getGlobalLeaderboard(sortBy, limit, gameMode) {
     };
   });
 
-  // Sort descending by value
-  entries.sort((a, b) => b.value - a.value);
+  const deduped = new Map();
+  for (const entry of entries) {
+    const usernameKey = (entry.username || "").trim().toLowerCase();
+    const key = usernameKey ? `u:${usernameKey}` : `id:${entry.playerId}`;
+    const existing = deduped.get(key);
+    if (!existing || entry.value > existing.value) {
+      deduped.set(key, entry);
+    }
+  }
 
-  // Take top N and add ranks
-  return entries.slice(0, limit).map((e, i) => ({
+  const mergedEntries = Array.from(deduped.values());
+  mergedEntries.sort((a, b) => b.value - a.value);
+
+  return mergedEntries.slice(0, limit).map((e, i) => ({
     rank: i + 1,
     ...e,
   }));

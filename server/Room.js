@@ -180,7 +180,11 @@ class Room {
     }
 
     // Transfer creator
-    if (wasCreator && this.players.size > 0) {
+    if (
+      wasCreator &&
+      this.players.size > 0 &&
+      this.state !== ROOM_STATES.ENDED
+    ) {
       const next = this.players.values().next().value;
       this.creatorId = next.id;
       this.creatorName = next.username;
